@@ -42,6 +42,16 @@ class Liked extends React.Component {
       dataPlayers:[],
     };
   }
+
+  _storePlayer = async () => {
+  	const currentState = this.props.favorites;
+  	console.log('====> State <======', currentState);
+	  try {
+	    await AsyncStorage.setItem('favoritePlayers', JSON.stringify(currentState));
+	  } catch (error) {
+	    console.log('Error saving player', error)
+	  }
+	};
   
   componentWillMount() {
   	const currentState = this.props.favorites;
@@ -60,8 +70,12 @@ class Liked extends React.Component {
   	}
   }
 
-  componentDidmount(){
-  }
+  favoritePlayers(playerId){
+  	this.props.postFavorite(playerId)
+  	setTimeout(() => {
+			this._storePlayer()
+		}, 2000);
+	}
 
   render() {
 	  return(
@@ -95,11 +109,6 @@ class Liked extends React.Component {
 	        />*/}
       </TouchableOpacity>
     );
-  }
-
-  favoritePlayer(playerId){
-  	this.props.postFavorite(playerId)
-  	this._storePlayer()
   }
 
   componentsWillUnmount(){
