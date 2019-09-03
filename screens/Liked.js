@@ -15,7 +15,6 @@ import { WebBrowser } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { postFavorite } from '../actions/ActionCreators';
-import store from '../store';
 
 import { MonoText } from '../components/StyledText';
 
@@ -30,7 +29,11 @@ const mapDispatchToProps = dispatch=> ({
 
 class Liked extends React.Component {
   static navigationOptions = {
-    header: 'Starred Players',
+    title: 'Favorite players',
+    headerTitleStyle: {
+      alignSelf: 'center',
+      // paddingRight: 56,
+    },
   };
 
   constructor(props) {
@@ -41,21 +44,23 @@ class Liked extends React.Component {
   }
   
   componentWillMount() {
-  	const currentState = store.getState();
+  	const currentState = this.props.favorites;
   	console.log('====> State <======', currentState);
   	var i
   	var prelim = [];
-  	for (i = 0; i<currentState.favorites.length; i++){
+  	for (i = 0; i<currentState.length; i++){
 	  	fetch("https://www.thesportsdb.com/api/v1/json/1/lookupplayer.php?id="+currentState[i])
 	    .then(response => response.json())
 	    .then((responseJson)=>{
-	    	prelim.push(responseJson)
+	    	prelim.push(responseJson.players[0])
+	    	this.setState({
+		      dataPlayers: prelim
+		    })
 	    }).catch(error=>console.log(error))
   	}
-  	console.log("in the beginning", prelim)
-  	this.setState({
-      dataPlayers: prelim
-    })
+  }
+
+  componentDidmount(){
   }
 
   render() {
@@ -95,6 +100,9 @@ class Liked extends React.Component {
   favoritePlayer(playerId){
   	this.props.postFavorite(playerId)
   	this._storePlayer()
+  }
+
+  componentsWillUnmount(){
   }
 
 }

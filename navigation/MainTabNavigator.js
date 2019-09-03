@@ -8,6 +8,7 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import TeamDetails from '../screens/TeamDetails';
 import LoadingScreen from '../screens/LoadingScreen';
+import Liked from '../screens/Liked';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -28,12 +29,12 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const LikedStack = createStackNavigator({
+  Links: Liked,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+LikedStack.navigationOptions = {
+  tabBarLabel: 'Liked',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -58,7 +59,7 @@ SettingsStack.navigationOptions = {
 
 const MainTab = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  LikedStack,
   SettingsStack,
 });
 

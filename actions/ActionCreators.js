@@ -3,7 +3,7 @@ import * as ActionTypes from './ActionTypes';
 export const postFavorite = (playerId) => (dispatch) => {
 	setTimeout(() => {
 		dispatch(addFavorite(playerId))
-	}, 1000);
+	}, 500);
 }
 
 export const addFavorite = (playerId) => ({

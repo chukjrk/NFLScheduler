@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { postFavorite } from '../actions/ActionCreators';
+import { addFavorite } from '../actions/ActionCreators';
 
 import { MonoText } from '../components/StyledText';
 
@@ -17,7 +17,7 @@ const mapStateToProps = state => {
     }
 }
 const mapDispatchToProps = dispatch=> ({
-    postFavorite: (playerId) => dispatch(postFavorite(playerId))
+    addFavorite: (playerId) => dispatch(addFavorite(playerId))
 });
 
 class LoadingScreen extends React.Component {
@@ -54,7 +54,7 @@ class LoadingScreen extends React.Component {
               .then(req => JSON.parse(req))
               .then(json => {
                 console.log('Heres Jason', json)
-                this.props.postFavorite(json.favorites)
+                this.props.addFavorite(json)
               });
       }
     } catch (error) {

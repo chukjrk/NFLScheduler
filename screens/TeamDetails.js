@@ -15,7 +15,6 @@ import { WebBrowser } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { postFavorite } from '../actions/ActionCreators';
-import store from '../store';
 
 import { MonoText } from '../components/StyledText';
 
@@ -40,6 +39,7 @@ class TeamDetails extends React.Component {
       dataNext:{},
       dataPlayers:[],
     };
+    this._storePlayer = this._storePlayer.bind(this);
   }
 
   _setTeam = async (teamId) => {
@@ -52,7 +52,7 @@ class TeamDetails extends React.Component {
 	};
 
   _storePlayer = async () => {
-  	const currentState = store.getState();
+  	const currentState = this.props.favorites;
   	console.log('====> State <======', currentState);
 	  try {
 	    await AsyncStorage.setItem('favoritePlayers', JSON.stringify(currentState));
@@ -82,7 +82,7 @@ class TeamDetails extends React.Component {
     .then(response => response.text()) 
     .then((dataStr) => {
       let responseJson = JSON.parse(dataStr);
-      console.log(responseJson)
+      // console.log(responseJson)
       this.setState({
       	dataNext:responseJson
       })
@@ -152,8 +152,11 @@ class TeamDetails extends React.Component {
 
   favoritePlayers(playerId){
   	this.props.postFavorite(playerId)
-  	this._storePlayer()
-  }
+  	setTimeout(() => {
+			this._storePlayer()
+		}, 2000);
+	}
+  
 }
 
 
