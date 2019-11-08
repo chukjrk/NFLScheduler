@@ -53,7 +53,6 @@ class TeamDetails extends React.Component {
   _setTeam = async (teamId) => {
 	  try {
 	    await AsyncStorage.setItem('favoriteTeam', teamId);
-	    console.log('TEAM PICKED')
 	  } catch (error) {
 	    console.log('Error saving player', error)
 	  }
@@ -61,7 +60,6 @@ class TeamDetails extends React.Component {
 
   _storePlayer = async () => {
   	const currentState = this.props.favorites;
-  	console.log('====> State <======', currentState);
 	  try {
 	    await AsyncStorage.setItem('favoritePlayers', JSON.stringify(currentState));
 	  } catch (error) {
@@ -152,42 +150,39 @@ class TeamDetails extends React.Component {
   render() {
   	const teamId = this.props.navigation.getParam('uid','');
 	  return(
-	   	<ScrollView style={styles.container}>
-	   		<View style={styles.top}>
-	   			<Image
-	          style={{width: 150, height: 150}}
-	          source={{uri: this.state.dataTeam.strTeamBadge}}
-	        />
-	        <Ionicons  
-			    	name={this.state.heart ? "md-heart" : "md-heart-empty"}
-			    	style={{paddingRight: 15, paddingTop: 10}}
-			    	size={30}
-			    	color="red"
-			    	onPress={() => this._setTeam(teamId)}/>
-	        <Image
-	          style={{width: 250, height: 100}}
-	          source={{uri: this.state.dataTeam.strTeamLogo}}
-	        />
+	  	<View style={styles.container}>
+      	<View style={styles.fixedHeader}>
+          <View style={styles.top}>
+		   			<Image
+		          style={{width: 40, height: 40, paddingTop: 10}}
+		          source={{uri: this.state.dataTeam.strTeamBadge}}
+		        />
+		        <View style={styles.nameText}>
+				    	<Text style={{fontSize: 20, color: '#BB86FC', paddingVertical: 5}}>{this.state.dataTeam.strTeam}</Text>
+              <Text style={{fontSize: 15, color: '#BB86FC80'}}>({this.state.dataTeam.strTeamShort})</Text>
+			      </View>
+		        <Ionicons  
+				    	name={this.state.heart ? "md-heart" : "md-heart-empty"}
+				    	style={{paddingRight: 5, paddingTop: 5}}
+				    	size={30}
+				    	color="red"
+				    	onPress={() => this._setTeam(teamId)}/>
+		   		</View>
 	   		</View>
-	   		<View style={styles.nameText}>
-		    	<Text style={{fontSize: 20, paddingBottom: 5}}>{this.state.dataTeam.strTeam}</Text>
-		    	<Text style={{fontSize: 20, paddingBottom: 5}}>({this.state.dataTeam.strTeamShort})</Text>		    	
-	      </View>
-	      <View style={styles.infoTeam}>
-		    	<Text style={{fontSize: 20, paddingBottom: 5}}>Current Manager:  {this.state.dataTeam.strManager}</Text>
-		    	<Text style={{fontSize: 20, paddingBottom: 15}}>Current Stadium:  {this.state.dataTeam.strStadium}</Text>
-	    	</View>
+	   	<ScrollView>
 	    	<View style={styles.eventDisplay}>
 	    		<View style={styles.eventHeader}>
-	    			<Text style={styles.homeText}>Home</Text>
-	    			<Text style={styles.awayText}>Away</Text>
+            <Text style={styles.upText}>Upcoming</Text>
+            <View style={styles.eventHeaderSub}>
+  	    			<Text style={ this.state.home ? styles.homeText : styles.homeText2 }>Home</Text>
+  	    			<Text style={ this.state.home ? styles.awayText2  : styles.awayText }>Away</Text>
+            </View>
 	    		</View>
-		  		<View style={this.state.home ? styles.homeDisplay : styles.awayDisplay}>
-		  			<Text style={styles.upText}>Upcoming</Text>
+		  		<View>
 		  			<CountDown
 		          until={this.props.timer}
 		          timeLabelStyle={{color: 'white'}}
-		          digitStyle={{backgroundColor: '#FFF', borderWidth: 2, borderColor: '#1CC625'}}
+		          digitStyle={{backgroundColor: 'white', borderWidth: 2, borderColor: '#121212'}}
 		          size={18}
 		          timeToShow= {['D', 'H', 'M', 'S']}
 		          timeLabels={{d: 'dd',h: 'hh',m: 'mm', s: 'ss'}}
@@ -199,14 +194,22 @@ class TeamDetails extends React.Component {
 		  			</View>
 		      </View>
 		  	</View>
+		  	<View style={styles.firstSection}>
+		      <View style={styles.infoTeam}>
+		      	<Text style={{fontSize: 15, color: '#BB86FC', paddingBottom: 5}}>{this.state.dataTeam.intFormedYear}</Text>
+			    	<Text style={{fontSize: 20, color: 'white', paddingBottom: 5}}>Current Manager:  {this.state.dataTeam.strManager}</Text>
+			    	<Text style={{fontSize: 20, color: 'white', paddingBottom: 15}}>Current Stadium:  {this.state.dataTeam.strStadium}</Text>
+		    	</View>
+		    </View>
 		  	<View style={styles.players}>
-		  		<Text>CURRENT PLAYERS</Text>
+		  		<Text style={{padding: 8, color: '#BB86FC', borderBottomWidth: StyleSheet.hairlineWidth}}>CURRENT ROSTER</Text>
 		  		<FlatList
 		        data={this.state.dataPlayers}
 		        renderItem= {item => this.renderPlayers(item)}
 		        />
 		  	</View>
 	  	</ScrollView>
+	  	</View>
     );
   }
 
@@ -225,7 +228,7 @@ class TeamDetails extends React.Component {
         <Ionicons  
 		    	name={favorited ? 'md-star' : 'md-star-outline'}
 		    	size={30}
-		    	color="gold"
+		    	color="white"
 		    	onPress={() => this.favoritePlayers(data.item.idPlayer)}/>
       </View>
     );
@@ -238,20 +241,30 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 5,
 		paddingHorizontal: 5,
-		backgroundColor: '#fff',
+		backgroundColor: '#121212',
 	},
+  fixedHeader: {
+    backgroundColor: '#292929',
+  },
 	top:{
 		flexDirection: 'row',
+    padding: 8,
+    paddingTop: 15,
 		justifyContent: 'space-between',
 		flexWrap: 'wrap',
-		paddingTop: 25,
-		paddingBottom: 25
 	},
 	nameText: {
-		flexDirection: 'row',
 		justifyContent: 'space-between',
 		flexWrap: 'wrap',
-		alignItems: 'flex-start',
+		flexDirection: 'column',
+    alignItems: 'center'
+	},
+	firstSection: {
+		backgroundColor: '#ffffff14',
+		margin: 5,
+		padding: 8,
+		borderRadius: 5,
+    alignItems: 'flex-start'
 	},
 	infoTeam: {
 		flexDirection: 'column',
@@ -259,12 +272,21 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		flexWrap: 'wrap'
 	},
+	eventDisplay: {
+		backgroundColor: '#ffffff14',
+		margin: 5,
+		padding: 8,
+		borderRadius: 5,
+		shadowColor: 'black',
+		shadowOpacity: 1
+	},
 	list:{
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		borderBottomWidth: StyleSheet.hairlineWidth,
-		paddingVertical: 8,
+		borderBottomColor: '#ffffff',
+		padding: 8,
 	},
 	playerThumb: {
 		width: 100,
@@ -276,33 +298,55 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start'
 	},
 	eventHeader:{
-		justifyContent: 'flex-end',
-		alignItems: 'flex-end',
+		justifyContent: 'space-between',
+		// alignItems: 'flex-end',
 		flexDirection: 'row'
 	},
+  eventHeaderSub: {
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+  },
 	homeText: {
 		fontSize: 15,
 		color: 'white',
 		fontWeight: 'bold',
 		padding: 8,
-		backgroundColor: '#73aedb',
-		borderColor:'#73aedb',
-		borderWidth: 1,
-		borderRadius: 10,
+    marginHorizontal: 5,
+    marginBottom: 5
 	},
+  homeText2: {
+    fontSize: 15,
+    color: 'white',
+    fontWeight: 'bold',
+    padding: 8,
+    borderColor:'#03DAC5',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    marginBottom: 5
+  },
 	awayText: {
 		fontSize: 15,
 		color: 'white',
 		fontWeight: 'bold',
 		padding: 8,
-		backgroundColor: '#f29898',
-		borderColor:'#f29898',
-		borderWidth: 1,
-		borderRadius: 50,
+    marginHorizontal: 5,
+    marginBottom: 5
 	},
+  awayText2: {
+    fontSize: 15,
+    color: 'white',
+    fontWeight: 'bold',
+    padding: 8,
+    borderColor:'#ffab40',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    marginBottom: 5
+  },
 	upText: {
 		fontSize: 20,
-		color: 'white',
+		color: '#BB86FC',
 		fontWeight: 'bold',
 		paddingHorizontal: 5,
 	},
@@ -314,19 +358,12 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		color: 'white',
 	},
-	homeDisplay: {
-		paddingVertical: 5,
-		backgroundColor: '#73aedb',
-	},
-	awayDisplay: {
-		paddingVertical: 5,
-		backgroundColor: '#f29898',
-	},
 	players: {
 		paddingTop: 30,
 	},
 	lightText: {
 		fontSize: 15,
+		color: 'white'
 	}
 })
 

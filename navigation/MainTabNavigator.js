@@ -27,6 +27,17 @@ HomeStack.navigationOptions = {
       }
     />
   ),
+  tabBarOptions: {
+    activeTintColor: '#03DAC5',
+    inactiveTintColor: '#ffffff40',
+    tabStyle: {
+      backgroundColor: '#121212',
+    },
+    style: {
+      borderTopColor: '#121212'
+    }
+  },
+  
 };
 
 const LikedStack = createStackNavigator({
@@ -41,6 +52,17 @@ LikedStack.navigationOptions = {
       name={Platform.OS === 'ios' ? 'ios-star' : 'md-star'}
     />
   ),
+  tabBarOptions: {
+    activeTintColor: '#03DAC5',
+    inactiveTintColor: '#ffffff40',
+    tabStyle: {
+      backgroundColor: '#121212',
+      borderTopColor: '#121212'
+    },
+    style: {
+      borderTopColor: '#121212'
+    }
+  },
 };
 
 const SettingsStack = createStackNavigator({
@@ -60,7 +82,6 @@ SettingsStack.navigationOptions = {
 const MainTab = createBottomTabNavigator({
   HomeStack,
   LikedStack,
-  SettingsStack,
 });
 
 export default createSwitchNavigator({

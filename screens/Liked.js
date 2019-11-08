@@ -29,10 +29,14 @@ const mapDispatchToProps = dispatch=> ({
 
 class Liked extends React.Component {
   static navigationOptions = {
-    title: 'Favorite players',
+    title: 'Favorite Players',
+    headerStyle: {
+      backgroundColor: '#292929',
+      borderBottomColor: '#292929',
+    },
     headerTitleStyle: {
       alignSelf: 'center',
-      // paddingRight: 56,
+      color: '#BB86FC'
     },
   };
 
@@ -45,7 +49,6 @@ class Liked extends React.Component {
 
   _storePlayer = async () => {
   	const currentState = this.props.favorites;
-  	console.log('====> State <======', currentState);
 	  try {
 	    await AsyncStorage.setItem('favoritePlayers', JSON.stringify(currentState));
 	  } catch (error) {
@@ -55,7 +58,6 @@ class Liked extends React.Component {
   
   componentWillMount() {
   	const currentState = this.props.favorites;
-  	console.log('====> State <======', currentState);
   	var i
   	var prelim = [];
   	for (i = 0; i<currentState.length; i++){
@@ -110,10 +112,6 @@ class Liked extends React.Component {
       </TouchableOpacity>
     );
   }
-
-  componentsWillUnmount(){
-  }
-
 }
 
 
@@ -122,7 +120,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 5,
 		paddingHorizontal: 5,
-		backgroundColor: '#fff',
+		backgroundColor: '#121212',
 	},
 	top:{
 		flexDirection: 'row',
@@ -144,8 +142,8 @@ const styles = StyleSheet.create({
 	list:{
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		// justifyContent: 'space-between',
 		borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#FFFFFF20',
 		paddingVertical: 8,
 	},
 	playerThumb: {
@@ -156,7 +154,11 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 15,
 		flexDirection: 'column',
 		alignItems: 'flex-start'
-	}
+	},
+  lightText: {
+    color: 'white',
+
+  }
 
 })
 

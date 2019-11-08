@@ -33,7 +33,7 @@ class LoadingScreen extends React.Component {
     try {
       AsyncStorage.getItem('favoriteTeam')
       .then((req) => {
-        console.log('======> Its pickle Req <======', req)
+        // console.log('======> Its pickle Req <======', req)
         this.props.navigation.navigate(req == null ? 'Home' 
           : 'TeamDetails', {uid:req});
       })

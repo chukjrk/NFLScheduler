@@ -14,13 +14,15 @@ import { WebBrowser } from 'expo';
 import Book from '../screens/TeamDetails'
 import { MonoText } from '../components/StyledText';
 
+let colors = ['#121212', '#ffffff'];
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
   constructor(props){
     super(props);
-    this.state ={
+    this.state = {
       loading: true,
       dataSource:[]
     };
@@ -38,6 +40,15 @@ export default class HomeScreen extends React.Component {
     .catch(error=>console.log(error))
   }
 
+  renderFlatListStickyHeader(){
+    var stickyHeaderView = (
+      <View style={styles.headerStyle}>
+        <Text style={{textAlign: 'center', color: '#BB86FC', fontSize: 22, }}> NFL </Text>
+      </View>
+    );
+    return stickyHeaderView;
+  };
+
   render() {
     if(this.state.loading){
       return( 
@@ -50,8 +61,11 @@ export default class HomeScreen extends React.Component {
         <View style={styles.contentContainer}>
           <FlatList
             data={this.state.dataSource}
+            keyExtractor={(item, index) => item.idTeam}
             ItemSeperatorComponent = {this.FlatListItemSeperator}
-            renderItem= {item => this.renderItem(item)}
+            renderItem= {(item, index) => this.renderItem(item, index)}
+            ListHeaderComponent={this.renderFlatListStickyHeader}
+            stickyHeaderIndices={[0]}
             />
         </View>
       </View>
@@ -72,11 +86,14 @@ export default class HomeScreen extends React.Component {
     );
   }
 
-  renderItem=(data)=>{
+  renderItem=(data, index)=>{
+    console.log('this is an index', index)
     return(
-      <TouchableOpacity style={styles.list} onPress={() => this._gotoTeam(data)}>
-        <Text style={styles.teamName}>{data.item.strTeam}</Text> 
-      </TouchableOpacity>
+      <View style={{ backgroundColor: colors[index % colors.length] }}>
+        <TouchableOpacity style={styles.list} onPress={() => this._gotoTeam(data)}>
+          <Text style={styles.teamName}>{data.item.strTeam}</Text> 
+        </TouchableOpacity>
+      </View>
     );
   }
 }
@@ -84,8 +101,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 10
+    backgroundColor: '#121212',
   },
   contentContainer: {
     paddingTop: 30,
@@ -97,19 +113,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   list:{
-    paddingVertical: 15,
-    margin: 5,
-    backgroundColor: "#fff",
+    paddingVertical: 20,
+    marginHorizontal: 5,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderTopWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#ffffff50',
   },
   teamName: {
     fontSize: 17,
+    color: 'white'
   },
   getStartedText: {
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
     textAlign: 'center',
+  },
+  headerStyle:{ 
+    width: '100%', 
+    height: 65, 
+    backgroundColor: '#292929', 
+    alignItems: 'center', 
+    justifyContent: 'center'
   }
 });
